@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Header, MovieList, MovieDetails, Loading } from './components';
 import dataMovies from './data';
 
+
 class App extends Component {
 
   constructor(props) {
