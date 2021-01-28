@@ -12,7 +12,8 @@ class App extends Component {
     this.state = {
       movies: null,
       selectedMovie: 0,
-      loaded: false
+      loaded: false,
+      favoris: []
     }
 
   }
@@ -33,6 +34,23 @@ class App extends Component {
       movies,
       loaded: true
     })
+  }
+  addFavori = (title) => {
+    const favoris = this.state.favoris.slice(); //copie de favoris
+    const film = this.state.movies.find(m => m.title === title ); // on trouve le titre
+    favoris.push(film);
+    this.setState({ favoris })
+  }
+
+  removeFavori = (title) => {
+    const favoris = this.state.favoris.slice();
+    const index = this.state.favoris.findIndex( f => f.title === title); // on v a chercher l index du film à retirer
+    favoris.splice(index, 1); // on retire l index
+    this.setState({ favoris })
+
+
+
+
   }
 
   updateSelectedMovie = (index) => {
@@ -56,6 +74,9 @@ class App extends Component {
                   updateSelectedMovie={ this.updateSelectedMovie }
                   movies={ this.state.movies }
                   selectedMovie={ this.state.selectedMovie }
+                  addFavori={ this.addFavori }
+                  removeFavori={ this.removeFavori }
+                  favoris={ this.state.favoris.map( f=> f.title) } // on retourne un nouvel array avec les titres des films
                 />
               )
             }} />
