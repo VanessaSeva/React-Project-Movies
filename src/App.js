@@ -80,7 +80,14 @@ class App extends Component {
                 />
               )
             }} />
-            <Route path="/favoris" component={ Favoris } />
+            <Route path="/favoris" render={ (props) => {
+              return (
+              <Favoris 
+              favoris={ this.state.favoris }
+              removeFavori={ this.removeFavori }
+              />
+              ) 
+            }} />
             <Redirect to="/films" />
           </Switch>
          
