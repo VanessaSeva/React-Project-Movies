@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Header } from './components';
 import apiMovie, { apiMovieMap } from './conf/api.movie';
+import apiFirebase from './conf/api.firebase';
 import Films from './features/films';
 import Favoris from './features//favoris/components';
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
@@ -26,6 +27,11 @@ class App extends Component {
         this.updateMovies(movies);
       })
       .catch( err => console.log(err));
+
+      apiFirebase.get('favoris.json')
+                  .then( response => {
+                    console.log(response);
+                  } )
   }
 
   updateMovies = (movies) => {
@@ -39,24 +45,32 @@ class App extends Component {
     const favoris = this.state.favoris.slice(); //copie de favoris
     const film = this.state.movies.find(m => m.title === title ); // on trouve le titre
     favoris.push(film);
-    this.setState({ favoris })
+    this.setState({ 
+      favoris
+     }, () => {
+       this.saveFavoris();
+     })
   }
 
   removeFavori = (title) => {
     const favoris = this.state.favoris.slice();
     const index = this.state.favoris.findIndex( f => f.title === title); // on v a chercher l index du film à retirer
     favoris.splice(index, 1); // on retire l index
-    this.setState({ favoris })
-
-
-
-
+    this.setState({ 
+      favoris
+     }, () => {
+       this.saveFavoris();
+     })
   }
 
   updateSelectedMovie = (index) => {
     this.setState({
       selectedMovie: index
     })
+  }
+
+  saveFavoris = () => {
+    apiFirebase.put('favoris.json', this.state.favoris);
   }
 
   render() {
